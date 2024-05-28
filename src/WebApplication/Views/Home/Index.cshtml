@@ -1,0 +1,94 @@
+﻿@{
+    ViewData["Title"] = "Solidariza Brasil - Doação";
+}
+
+@model CreateDonationViewModel
+
+@* <div class="text-center"> *@
+@*     <h1 class="display-4">Welcome</h1> *@
+@*     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p> *@
+@* </div> *@
+
+@* Criar página para recebe doações *@
+
+
+<div class="row">
+    <div class="col mt-5">
+        <h1 class="text-center">Doe para Solidariza Brasil</h1>
+        <p class="text-center">Transforme sua doação financeira em ajuda para quem precisa</p>
+        <form method="post" asp-action="CreateDonation">
+            @* @Html.EditorForModel() *@
+            <div class="form-group mt-2 mb-2">
+                <label asp-for="Name">Nome</label>
+                <input asp-for="Name" class="form-control" placeholder="Digite seu nome"/>
+                <p asp-validation-for="Name" class="text-danger"></p>
+            </div>
+
+            <div class="form-group mt-2 mb-2">
+                <label asp-for="Email">E-mail</label>
+                <input asp-for="Email" class="form-control" placeholder="Digite seu e-mail"/>
+            </div>
+            <div class="form-group mt-2 mb-2">
+                <label asp-for="Cpf">CPF</label>
+                <input asp-for="Cpf" type="text" class="form-control" id="cpf" placeholder="Digite seu CPF" required>
+            </div>
+            <div class="form-group mt-2 mb-2">
+                <label asp-for="Address">Endereço</label>
+                <input asp-for="Address" type="text" class="form-control" id="endereco" placeholder="Digite seu endereço" required>
+            </div>
+            <div class="form-group mt-2 mb-2">
+                <label asp-for="City">Cidade</label>
+                <input asp-for="City" class="form-control" placeholder="Digite sua cidade" required>
+            </div>
+            <div class="form-group mt-2 mb-2">
+                <label asp-for="State">Estado</label>
+                <select asp-for="State" class="form-control" required>
+                    <option value="">Selecione o estado</option>
+                    <option value="AC">Acre</option>
+                    <option value="AL">Alagoas</option>
+                    <option value="AP">Amapá</option>
+                    <option value="AM">Amazonas</option>
+                    <option value="BA">Bahia</option>
+                    <option value="CE">Ceará</option>
+                    <option value="DF">Distrito Federal</option>
+                    <option value="ES">Espírito Santo</option>
+                    <option value="GO">Goiás</option>
+                    <option value="MA">Maranhão</option>
+                    <option value="MT">Mato Grosso</option>
+                    <option value="MS">Mato Grosso do Sul</option>
+                    <option value="MG">Minas Gerais</option>
+                    <option value="PA">Pará</option>
+                    <option value="PB">Paraíba</option>
+                    <option value="PR">Paraná</option>
+                    <option value="PE">Pernambuco</option>
+                    <option value="PI">Piauí</option>
+                    <option value="RJ">Rio de Janeiro</option>
+                    <option value="RN">Rio Grande do Norte</option>
+                    <option value="RS">Rio Grande do Sul</option>
+                    <option value="RO">Rondônia</option>
+                    <option value="RR">Roraima</option>
+                    <option value="SC">Santa Catarina</option>
+                    <option value="SP">São Paulo</option>
+                    <option value="SE">Sergipe</option>
+                    <option value="TO">Tocantins</option>
+                </select>
+            </div>
+            <div class="form-group mt-2 mb-2">
+                <label asp-for="Amount">Valor</label>
+                <input asp-for="Amount" type="number" class="form-control" id="valor" placeholder="Digite o valor da doação" required>
+            </div>
+            <div class="form-group mt-2 mb-2">
+                <label for="formaPagamento">Forma de pagamento</label>
+                <select class="form-control" id="formaPagamento">
+                    @* <option value="credito">Cartão de crédito</option> *@
+                    @* <option value="debito">Cartão de débito</option> *@
+                    @* <option value="boleto">Boleto</option> *@
+                    <option value="pix" selected="selected">Pix</option>
+                </select>
+            </div>
+            <div class="mt-5 mb-5">
+                <button type="submit" class="btn btn-primary btn-block btn-lg">Doar</button>
+            </div>
+        </form>
+    </div>
+</div>
