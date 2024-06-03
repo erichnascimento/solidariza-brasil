@@ -34,15 +34,20 @@ public class HomeController : Controller
             model.Name,
             model.Email,
             model.Cpf,
-            model.Address,
-            model.City,
-            model.State,
             model.Amount
         );
         var output = await _createDonationUseCase.Execute(input);
         
 
-        return RedirectToAction("ShowPixDonation");
+        var viewModel = new ShowPixDonationViewModel(
+            Code: output.Code,
+            Name: model.Name,
+            Email: model.Email,
+            Cpf: model.Cpf,
+            Amount: model.Amount
+        );
+        
+        return View("ShowPixDonation", model: viewModel);
     }
 
     public IActionResult ShowPixDonation()

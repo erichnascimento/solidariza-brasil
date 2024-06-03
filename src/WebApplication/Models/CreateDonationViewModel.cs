@@ -10,11 +10,5 @@ public record CreateDonationViewModel(
     [Required]
     string Cpf,
     [Required]
-    string Address,
-    [Required]
-    string City,
-    [Required]
-    string State,
-    [Required]
     string Amount
 );

@@ -1,8 +1,28 @@
 using Domain;
+using Infra.Clock;
+using Infra.Donation;
+using Infra.Persistence.EfCore;
+using Infra.Persistence.EfCore.DataModels;
+using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 var builder = Microsoft.AspNetCore.Builder.WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddScoped<IClock, SystemClock>();
+builder.Services.AddScoped<IDonationIntentCodeGenerator, DonationIntentCodeGenerator>();
+
+var pgConnectionString = builder.Configuration.GetConnectionString("Postgres");
+var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString: pgConnectionString);
+dataSourceBuilder.MapEnum<DonationIntentDataModel.DonationIntentStatus>("donation_intent_status");
+var dataSource = dataSourceBuilder.Build();
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+{
+    options.UseNpgsql(dataSource);
+});
+
+builder.Services.AddScoped<IRepository, EfCoreRepository>();
+
 builder.Services.AddScoped<CreateDonationUseCase>();
 
 // Add services to the container.
