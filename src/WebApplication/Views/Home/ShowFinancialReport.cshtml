@@ -1,0 +1,47 @@
+@{
+    ViewData["Title"] = "Solidariza Brasil - Relatório de Doações";
+}
+
+@model ShowFinancialReportViewModel
+
+<div class="row">
+    <div class="col mt-5">
+        <h1 class="text-center">Relatório financeiro</h1>
+        <p class="text-center">Veja o relatório financeiro das doações realizadas para a campanha Solidariza Brasil</p>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Tipo</th>
+                <th>Descrição</th>
+                <th>C/D</th>
+                <th>Valor</th>
+                <th>Data</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var donation in Model.Transactions)
+            {
+                <tr class="@(donation.Type == ShowFinancialReportViewModel.Transaction.TransactionType.Donation ? "table-success" : "table-danger")">
+                    <td>@donation.TypeText</td>
+                    <td><a href="@donation.Url">@donation.Description</a></td>
+                    <td>@donation.CreditDebit</td>
+                    <td>@donation.Amount</td>
+                    <td>@donation.Date</td>
+                </tr>
+            }
+            <tr>
+                <td colspan="3" class="text-end">Total de doações</td>
+                <td colspan="4" class="text-start">@Model.TotalDonations</td>
+            </tr>
+            <tr>
+                <td colspan="3" class="text-end">Total de ações solidárias</td>
+                <td colspan="4" class="text-start">@Model.TotalWithdraws</td>
+            </tr>
+            <tr>
+                <td colspan="3" class="text-end fs-3">Saldo</td>
+                <td colspan="4" class="text-start fs-3">@Model.TotalBalance</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

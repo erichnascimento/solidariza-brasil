@@ -37,7 +37,7 @@ public class HomeController : Controller
             model.Amount
         );
         var output = await _createDonationUseCase.Execute(input);
-        
+
 
         var viewModel = new ShowPixDonationViewModel(
             Code: output.Code,
@@ -46,7 +46,7 @@ public class HomeController : Controller
             Cpf: model.Cpf,
             Amount: model.Amount
         );
-        
+
         return View("ShowPixDonation", model: viewModel);
     }
 
@@ -59,10 +59,58 @@ public class HomeController : Controller
     {
         return View("Manifesto");
     }
-    
+
     public IActionResult ShowReport()
     {
-        return View();
+        var donations = new List<ShowReportViewModel.Donation>
+        {
+            new(
+                Name: "Eri** *******nto",
+                Email: "eri**@gmail.com",
+                Cpf: "123.***.***-00",
+                Amount: "R$ 100,00",
+                Date: "01/10/2021",
+                Code: "123456",
+                Status: ShowReportViewModel.Donation.DonationStatus.Confirmed
+            ),
+            new(
+                Name: "Ana ***** *ais",
+                Email: "ana*****@hotmail.com",
+                Cpf: "033.***.***-06",
+                Amount: "R$ 50,00",
+                Date: "23/11/2021",
+                Code: "654321",
+                Status: ShowReportViewModel.Donation.DonationStatus.Pending
+            ),
+        };
+        var viewModel = new ShowReportViewModel(
+            Donations: donations);
+
+        return View(model: viewModel);
+    }
+
+    public IActionResult ShowFinancialReport()
+    {
+        var transactions = new List<ShowFinancialReportViewModel.Transaction>
+        {
+            new(
+                Type: ShowFinancialReportViewModel.Transaction.TransactionType.Donation,
+                Amount: "100,00",
+                Date: "01/10/2021",
+                Code: "123456"
+            ),
+            new(
+                Type: ShowFinancialReportViewModel.Transaction.TransactionType.Withdraw,
+                Amount: "50,00",
+                Date: "23/11/2021",
+                Code: "654321",
+                Url: "/images/874102984610928.jpeg"
+            ),
+        };
+        var viewModel = new ShowFinancialReportViewModel(
+            Transactions: transactions);
+        
+        return View(model: viewModel);
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

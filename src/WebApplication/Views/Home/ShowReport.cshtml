@@ -1,0 +1,46 @@
+@{
+    ViewData["Title"] = "Solidariza Brasil - Relatório de Doações";
+}
+
+@model ShowReportViewModel
+
+<div class="row">
+    <div class="col mt-5">
+        <h1 class="text-center">Relatório de Doações</h1>
+        <p class="text-center">Veja o relatório de doações realizadas para a campanha Solidariza Brasil</p>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Nome</th>
+                <th>E-mail</th>
+                <th>CPF</th>
+                <th>Valor</th>
+                <th>Data</th>
+                <th>Situação</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var donation in Model.Donations)
+            {
+                <tr>
+                    <td>@donation.Name</td>
+                    <td>@donation.Email</td>
+                    <td>@donation.Cpf</td>
+                    <td>@donation.Amount</td>
+                    <td>@donation.Date</td>
+                    <td class="text-center">
+                        @if (donation.Status == ShowReportViewModel.Donation.DonationStatus.Pending)
+                        {
+                            <span class="badge bg-primary">Pendente</span>
+                        }
+                        else if (donation.Status == ShowReportViewModel.Donation.DonationStatus.Confirmed)
+                        {
+                            <span class="badge bg-success">Confirmada</span>
+                        }
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
