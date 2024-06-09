@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
@@ -6,16 +5,13 @@ using WebApplication.Models;
 
 namespace WebApplication.Controllers;
 
-public class HomeController : Controller
+public class HomeController(
+    ILogger<HomeController> logger,
+    CreateDonationUseCase createDonationUseCase,
+    IQueryRepository queryRepository)
+    : Controller
 {
-    private readonly ILogger<HomeController> _logger;
-    private readonly CreateDonationUseCase _createDonationUseCase;
-
-    public HomeController(ILogger<HomeController> logger, CreateDonationUseCase createDonationUseCase)
-    {
-        _logger = logger;
-        _createDonationUseCase = createDonationUseCase;
-    }
+    private readonly ILogger<HomeController> _logger = logger;
 
     public IActionResult Index()
     {
@@ -36,7 +32,7 @@ public class HomeController : Controller
             model.Cpf,
             model.Amount
         );
-        var output = await _createDonationUseCase.Execute(input);
+        var output = await createDonationUseCase.Execute(input);
 
 
         var viewModel = new ShowPixDonationViewModel(
@@ -44,7 +40,7 @@ public class HomeController : Controller
             Name: model.Name,
             Email: model.Email,
             Cpf: model.Cpf,
-            Amount: model.Amount
+            Amount: model.Amount.ToString("C")
         );
 
         return View("ShowPixDonation", model: viewModel);
@@ -60,56 +56,42 @@ public class HomeController : Controller
         return View("Manifesto");
     }
 
-    public IActionResult ShowReport()
+    public async Task<IActionResult> ShowReport()
     {
-        var donations = new List<ShowReportViewModel.Donation>
-        {
-            new(
-                Name: "Eri** *******nto",
-                Email: "eri**@gmail.com",
-                Cpf: "123.***.***-00",
-                Amount: "R$ 100,00",
-                Date: "01/10/2021",
-                Code: "123456",
-                Status: ShowReportViewModel.Donation.DonationStatus.Confirmed
-            ),
-            new(
-                Name: "Ana ***** *ais",
-                Email: "ana*****@hotmail.com",
-                Cpf: "033.***.***-06",
-                Amount: "R$ 50,00",
-                Date: "23/11/2021",
-                Code: "654321",
-                Status: ShowReportViewModel.Donation.DonationStatus.Pending
-            ),
-        };
+        var query = new IQueryRepository.GetDonationIntentsQuery();
+        var donations = await queryRepository.GetDonationIntents(query: query);
+
         var viewModel = new ShowReportViewModel(
-            Donations: donations);
+            Donations: donations.Select(d => new ShowReportViewModel.Donation(
+                Name: d.Name,
+                Email: d.Email,
+                Cpf: d.Cpf,
+                Amount: d.Amount.ToString("C"),
+                Date: d.DonationDate?.ToString("dd/MM/yyyy"),
+                Code: d.Code,
+                Status: ShowReportViewModel.Donation.Map(d.Status)
+            ))
+        );
 
         return View(model: viewModel);
     }
 
-    public IActionResult ShowFinancialReport()
+    public async Task<IActionResult> ShowFinancialReport()
     {
-        var transactions = new List<ShowFinancialReportViewModel.Transaction>
-        {
-            new(
-                Type: ShowFinancialReportViewModel.Transaction.TransactionType.Donation,
-                Amount: "100,00",
-                Date: "01/10/2021",
-                Code: "123456"
-            ),
-            new(
-                Type: ShowFinancialReportViewModel.Transaction.TransactionType.Withdraw,
-                Amount: "50,00",
-                Date: "23/11/2021",
-                Code: "654321",
-                Url: "/images/874102984610928.jpeg"
-            ),
-        };
+        var query = new IQueryRepository.GetFinancialTransactionsQuery();
+        var transactions = await queryRepository.GetFinancialTransactions(query: query);
+
         var viewModel = new ShowFinancialReportViewModel(
-            Transactions: transactions);
-        
+            Transactions: transactions.Select(t => new ShowFinancialReportViewModel.Transaction(
+                Type: ShowFinancialReportViewModel.Transaction.Map(t.Type),
+                Amount: t.Amount.ToString("C"),
+                AmountValue: t.Amount,
+                Date: t.Date,
+                Code: t.Code,
+                Url: t.Url
+            ))
+        );
+
         return View(model: viewModel);
     }
 

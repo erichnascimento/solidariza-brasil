@@ -15,11 +15,13 @@ builder.Services.AddScoped<IDonationIntentCodeGenerator, DonationIntentCodeGener
 var pgConnectionString = builder.Configuration.GetConnectionString("Postgres");
 var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString: pgConnectionString);
 dataSourceBuilder.MapEnum<DonationIntentDataModel.DonationIntentStatus>("donation_intent_status");
+dataSourceBuilder.MapEnum<FinancialTransactionDataModel.FinancialTransactionType>("financial_transaction_type");
 var dataSource = dataSourceBuilder.Build();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseNpgsql(dataSource);
 });
+builder.Services.AddScoped<IQueryRepository, EfCoreRepository>();
 
 builder.Services.AddScoped<IRepository, EfCoreRepository>();
 

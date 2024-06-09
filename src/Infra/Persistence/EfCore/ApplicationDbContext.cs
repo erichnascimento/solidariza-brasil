@@ -6,6 +6,7 @@ namespace Infra.Persistence.EfCore;
 public class ApplicationDbContext : DbContext
 {
     public DbSet<DonationIntentDataModel> DonationIntents { get; set; } = null!;
+    public DbSet<FinancialTransactionDataModel> FinancialTransactions { get; set; } = null!;
 
     /// <summary>
     /// Constructor for ApplicationDbContext.

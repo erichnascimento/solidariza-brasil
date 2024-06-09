@@ -26,7 +26,7 @@ public class CreateDonationUseCase
             name: input.Name,
             email: input.Email,
             cpf: input.Cpf,
-            amount: decimal.Parse(input.Amount),
+            amount: input.Amount,
             now: now
         );
 
@@ -47,7 +47,7 @@ public class CreateDonationUseCase
         string Name,
         string Email,
         string Cpf,
-        string Amount
+        decimal Amount
     );
 
     public record Output(

@@ -10,5 +10,5 @@ public record CreateDonationViewModel(
     [Required]
     string Cpf,
     [Required]
-    string Amount
+    decimal Amount
 );

@@ -15,6 +15,7 @@
                 <th>E-mail</th>
                 <th>CPF</th>
                 <th>Valor</th>
+                <th>Código</th>
                 <th>Data</th>
                 <th>Situação</th>
             </tr>
@@ -23,19 +24,23 @@
             @foreach (var donation in Model.Donations)
             {
                 <tr>
-                    <td>@donation.Name</td>
-                    <td>@donation.Email</td>
-                    <td>@donation.Cpf</td>
+                    <td>@donation.NameMasked</td>
+                    <td>@donation.EmailMasked</td>
+                    <td>@donation.CpfMasked</td>
                     <td>@donation.Amount</td>
+                    <td>@donation.Code</td>
                     <td>@donation.Date</td>
                     <td class="text-center">
-                        @if (donation.Status == ShowReportViewModel.Donation.DonationStatus.Pending)
+                        @switch (donation.Status)
                         {
-                            <span class="badge bg-primary">Pendente</span>
-                        }
-                        else if (donation.Status == ShowReportViewModel.Donation.DonationStatus.Confirmed)
-                        {
-                            <span class="badge bg-success">Confirmada</span>
+                            case ShowReportViewModel.Donation.DonationStatus.Pending:
+                                <span class="badge bg-primary">@donation.StatusText</span>
+                                break;
+                            case ShowReportViewModel.Donation.DonationStatus.Confirmed:
+                                <span class="badge bg-success">@donation.StatusText</span>
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
                         }
                     </td>
                 </tr>

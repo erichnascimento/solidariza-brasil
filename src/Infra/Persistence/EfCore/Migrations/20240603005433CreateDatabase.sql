@@ -20,3 +20,16 @@ CREATE TABLE IF NOT EXISTS donation_intents
     created_at           TIMESTAMP NOT NULL,
     updated_at           TIMESTAMP NOT NULL
 );
+
+CREATE TYPE financial_transaction_type AS ENUM ('donation', 'withdrawal');
+
+CREATE TABLE IF NOT EXISTS financial_transactions
+(
+    code                 TEXT      NOT NULL PRIMARY KEY,
+    amount               DECIMAL(10, 2),
+    transaction_date     TIMESTAMP,
+    type                 FINANCIAL_TRANSACTION_TYPE,
+    receipt              TEXT,
+    
+    created_at           TIMESTAMP NOT NULL
+);

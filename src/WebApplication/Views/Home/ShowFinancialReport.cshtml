@@ -23,7 +23,7 @@
             {
                 <tr class="@(donation.Type == ShowFinancialReportViewModel.Transaction.TransactionType.Donation ? "table-success" : "table-danger")">
                     <td>@donation.TypeText</td>
-                    <td><a href="@donation.Url">@donation.Description</a></td>
+                    <td><a href="@donation.Url" target="_blank">@donation.Description</a></td>
                     <td>@donation.CreditDebit</td>
                     <td>@donation.Amount</td>
                     <td>@donation.Date</td>

@@ -5,23 +5,25 @@ public record ShowFinancialReportViewModel(
 {
     public string TotalDonations => Transactions
         .Where(t => t.Type == Transaction.TransactionType.Donation)
-        .Sum(t => decimal.Parse(t.Amount))
+        .Sum(t => t.AmountValue)
         .ToString("C");
-    
+
     public string TotalWithdraws => Transactions
         .Where(t => t.Type == Transaction.TransactionType.Withdraw)
-        .Sum(t => decimal.Parse(t.Amount))
+        .Sum(t => t.AmountValue)
         .ToString("C");
-    
+
     public string TotalBalance => Transactions
         .Sum(t => t.Type == Transaction.TransactionType.Donation
-            ? decimal.Parse(t.Amount)
-            : -decimal.Parse(t.Amount))
+            ? t.AmountValue
+            : -t.AmountValue
+        )
         .ToString("C");
-    
+
     public record Transaction(
         Transaction.TransactionType Type,
         string Amount,
+        decimal AmountValue,
         string Date,
         string Code,
         string? Url = null
@@ -33,14 +35,14 @@ public record ShowFinancialReportViewModel(
             TransactionType.Withdraw => "D",
             _ => throw new ArgumentOutOfRangeException(nameof(Type), Type, null)
         };
-        
+
         public string Description => Type switch
         {
             TransactionType.Donation => $"Doação {Code}",
             TransactionType.Withdraw => $"Ação solidária {Code}",
             _ => throw new ArgumentOutOfRangeException(nameof(Type), Type, null)
         };
-        
+
         public string TypeText => Type switch
         {
             TransactionType.Donation => "Doação",
@@ -52,6 +54,16 @@ public record ShowFinancialReportViewModel(
         {
             Donation,
             Withdraw
+        }
+
+        public static TransactionType Map(string type)
+        {
+            return type switch
+            {
+                "donation" => TransactionType.Donation,
+                "withdrawal" => TransactionType.Withdraw,
+                _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
+            };
         }
     }
 }
