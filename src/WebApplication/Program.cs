@@ -1,3 +1,4 @@
+using System.Globalization;
 using Domain;
 using Infra.Clock;
 using Infra.Donation;
@@ -5,6 +6,10 @@ using Infra.Persistence.EfCore;
 using Infra.Persistence.EfCore.DataModels;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
+
+var cultureInfo = new CultureInfo("pt-BR");
+CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
 var builder = Microsoft.AspNetCore.Builder.WebApplication.CreateBuilder(args);
 
